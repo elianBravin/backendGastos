@@ -1,2 +1,2 @@
-# backendGastos
-el back para la app de gastos
+# Gastos
+para los gastos de la casa
