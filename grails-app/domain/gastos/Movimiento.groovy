@@ -8,12 +8,12 @@ class Movimiento {
     }
 
     static belongsTo = [
-            libro : Libro
+            billetera : Billetera,
+            categoria: Categoria
     ]
 
     String descripcion
     Float cantidad
-    MetodosPagoEnum metodoPago //efectivo, tarjeta, transferencia
     Boolean esGasto
     Date dateCreated
     Date lastUpdated
@@ -21,12 +21,17 @@ class Movimiento {
     def getMap(){
         def result = [:]
         result.id = this.id
-        result.libro = this.libro.id
+        result.libro = this.billetera.nombre
         result.date_created = this.dateCreated
+        result.last_update = this.lastUpdated
         result.descripcion = this.descripcion
         result.cantidad = this.cantidad
-        result.es_gasto = this.esGasto
-        result.metodo_pago = this.metodoPago.toString()
+        result.billetera = this.billetera.toString()
+        result.categoria = this.categoria
         return result
+    }
+
+    String toString(){
+        return this.descripcion
     }
 }

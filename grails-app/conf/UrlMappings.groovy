@@ -5,38 +5,46 @@ class UrlMappings {
 
         //"/gastos"(controller: "libro", action: "getLibros")
 
-        "/libro"(controller: "libro", parseRequest: true) {
-            action = [POST: 'postLibro']
+        "/usuario"(controller: "usuario", parseRequest: true) {
+            action = [POST: 'crearUsuario']
         }
 
-        "/libro/$idLibro"(controller: "libro", parseRequest: true) {
-            action = [GET: 'getLibro']
+        "/usuario/$idUsuario"(controller: "usuario", parseRequest: true) {
+            action = [GET: 'obtenerUsuario', PUT:'modificarUsuario', DELETE:'borrarUsuario']
         }
 
-        "/libros"(controller: "libro", parseRequest: true) {
-            action = [GET: 'getLibros']
+        "/usuario/$idUsuario/billetera"(controller: "billetera", parseRequest: true) {
+            action = [POST: 'crearBilletera']
         }
 
-        "/$idLibro/movimiento"(controller: "movimiento", parseRequest: true) {
-            action = [POST: 'postMovimiento']
+        "/billetera/$idBilletera"(controller: "billetera", parseRequest: true) {
+            action = [GET: 'obtenerBilletera', PUT:'modificarBilletera', DELETE:'borrarBilletera']
         }
 
-        "/movimiento/$idMovimiento"(controller: "movimiento", parseRequest: true) {
-            action = [GET: 'getMovimiento', DELETE: "deleteMovimiento"]
-        }
-
-        "/libro/$idLibro/movimientos"(controller: "movimiento", parseRequest: true) {
-            action = [GET: 'getMovimientos']
-        }
-        "/libro/$idLibro/balance"(controller: "libro", parseRequest: true){
-            action = [GET: 'getBalance']
-        }
-        "/ping"(controller: "libro", parseRequest: true){
-            action = [GET: 'ping']
-        }
-
-        "/libro/$idLibro/movimientos/search"(controller: "movimiento", parseRequest: true) {
-            action = [GET: 'searchMovimientos']
-        }
+        //"/libros"(controller: "libro", parseRequest: true) {
+        //    action = [GET: 'getLibros']
+        //}
+        //
+        //"/$idLibro/movimiento"(controller: "movimiento", parseRequest: true) {
+        //    action = [POST: 'postMovimiento']
+        //}
+        //
+        //"/movimiento/$idMovimiento"(controller: "movimiento", parseRequest: true) {
+        //    action = [GET: 'getMovimiento', DELETE: "deleteMovimiento"]
+        //}
+        //
+        //"/libro/$idLibro/movimientos"(controller: "movimiento", parseRequest: true) {
+        //    action = [GET: 'getMovimientos']
+        //}
+        //"/libro/$idLibro/balance"(controller: "libro", parseRequest: true){
+        //    action = [GET: 'getBalance']
+        //}
+        //"/ping"(controller: "libro", parseRequest: true){
+        //    action = [GET: 'ping']
+        //}
+        //
+        //"/libro/$idLibro/movimientos/search"(controller: "movimiento", parseRequest: true) {
+        //    action = [GET: 'searchMovimientos']
+        //}
     }
 }
