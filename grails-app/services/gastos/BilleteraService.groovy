@@ -3,6 +3,8 @@ package gastos
 import grails.transaction.Transactional
 import utilsElian.CheckUtils
 
+import java.sql.Timestamp
+
 @Transactional
 class BilleteraService {
 
@@ -74,7 +76,11 @@ class BilleteraService {
         CheckUtils.checkAutorization(token, billetera.usuarios as List)
         CheckUtils.checkAndGetBody(requestParams, "desde", "Se necesita fecha de comienzo")
         CheckUtils.checkAndGetBody(requestParams, "hasta", "Se necesita fecha de finalización")
-        Date inicio = new Date().parse("yyyy-mm-dd'T'HH:mm:ss'Z'", requestParams.desde)
-        Date fin = new Date().parse("yyyy-mm-dd'T'HH:mm:ss'Z'", requestParams.desde)
+        Date desde = new java.util.Date().parse("yyyy-MM-dd'T'HH:mm:ss'Z'", requestParams.desde)
+        Date hasta = new java.util.Date().parse("yyyy-MM-dd'T'HH:mm:ss'Z'", requestParams.hasta)
+        //ZonedDateTime.parse("2015-05-03T10:15:30+01:00");
+        hasta.setTime(hasta.getTime() + 1000)
+        List<Movimiento> movimientos = Movimiento.findAllByDateCreatedBetweenAndBilletera(desde, hasta, billetera)
+        return movimientos.sort { Movimiento a, Movimiento b -> b.id <=> a.id}
     }
 }
