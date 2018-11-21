@@ -1,59 +1,43 @@
 package gastos
 
+import utilsElian.CheckUtils
+
 class MovimientoController {
 
     MovimientoService movimientoService
 
-    def postMovimiento(){
-        Libro libro = Libro.findById(params.long("idLibro"))
-        if(!libro){
-            throw new Exception("No se encontro el libro especificado")
-        }
+    def postMovimiento() {
+
         Map body = request.getJSON()
-        if(!(body?.descripcion) || !(body?.cantidad) || (body?.es_gasto  == null) || !(body?.metodo_pago)){
-            throw new Exception("body invalido")
-        }
-
-        movimientoService.postMovimiento(libro, body.descripcion, body.cantidad as Float, body.es_gasto, body.metodo_pago.toUpperCase())
-        body.status = "OK"
+        Long billeteraId = Long.parseLong(CheckUtils.checkAndGetParameter(params, "idBilletera", "Se necesita id de billetera"))
+        String token = CheckUtils.checkAndGetHeader(request, "Token")
         render(contentType: "application/json") {
-            body
+            movimientoService.postMovimiento(billeteraId, body, token)
         }
     }
 
-    def getMovimientos(){
-        Long idLibro = params.long("idLibro")
-        Libro libro = Libro.findById(idLibro)
-        List<Movimiento> response = movimientoService.getMovimientos(libro)
+    def getMovimiento() {
+        Long idMovimiento = Long.parseLong(CheckUtils.checkAndGetParameter(params, "idMovimiento", "Se nececita en id del movimiento"))
+        String token = CheckUtils.checkAndGetHeader(request, "Token")
         render(contentType: "application/json") {
-            response*.getMap()
+            movimientoService.getMovimiento(idMovimiento, token)
         }
     }
 
-    def getMovimiento(){
-        Long movimientoId = params.long("idMovimiento")
-        Movimiento response = movimientoService.getMovimiento(movimientoId)
+    def deleteMovimiento() {
+        Long idMovimiento = Long.parseLong(CheckUtils.checkAndGetParameter(params, "idMovimiento", "Se nececita en id del movimiento"))
+        String token = CheckUtils.checkAndGetHeader(request, "Token")
         render(contentType: "application/json") {
-            response.getMap()
+            movimientoService.deleteMovimiento(idMovimiento, token)
         }
     }
 
-    def deleteMovimiento(){
-        Long movimientoId = params.long("idMovimiento")
-        Movimiento response = movimientoService.deleteMovimiento(movimientoId)
+    def putMovimiento() {
+        Map body = request.getJSON()
+        Long idMovimiento = Long.parseLong(CheckUtils.checkAndGetParameter(params, "idMovimiento", "Se nececita en id del movimiento"))
+        String token = CheckUtils.checkAndGetHeader(request, "Token")
         render(contentType: "application/json") {
-            response.getMap()
-        }
-    }
-
-    def searchMovimientos(){
-        Long idLibro = params.long("idLibro")
-        params.get
-        String fecha = params["fecha"] ?: null
-        Libro libro = Libro.findById(idLibro)
-        List<Movimiento> response = movimientoService.searchMovimientos(libro, ["fecha":fecha])
-        render(contentType: "application/json") {
-            response*.getMap()
+            movimientoService.updateMovimiento(body, idMovimiento, token)
         }
     }
 }

@@ -1,33 +1,63 @@
 package gastos
 
-import sun.security.provider.MD5
+import utilsElian.CheckUtils
 
 class Usuario {
 
     static constraints = {
-        nombre(nullable: false)
-    }
-    static mapping = {
-        billeteras cascade: 'all-delete-orphan'
-        categorias cascade: 'all-delete-orphan'
+        email(nullable: false)
+        googleId(nullable: false)
     }
 
     static hasMany = [
             billeteras : Billetera,
-            categorias : Categoria
     ]
 
-    String nombre
-    MD5 password
+    String email
+    String googleId
+    String urlImagenPerfil
     Date dateCreated
     Date lastUpdated
+
+    Usuario(){
+        this.billeteras = []
+    }
 
 
     def toMap(){
         def result = [:]
-        result.nombre = this.nombre
         result.date_created = this.dateCreated
         result.last_updated = this.lastUpdated
+        result.email = this.email
+        result.google_id = this.googleId
+        result.url_imagen_perfil = this.urlImagenPerfil
+        result.billeteras = this.billeteras*.toMapForUsuario()
         return result
+    }
+
+    def toMapForBilletera(){
+        def result = [:]
+        result.email = this.email
+        result.google_id = this.googleId
+        result.url_imagen_perfil = this.urlImagenPerfil
+        return result
+    }
+
+    def updateFromMap(Map nuevosDatos){
+
+        if(nuevosDatos.email) {
+            List<Usuario> usuariosConEseEmail = Usuario.findAllByEmail(nuevosDatos.email)
+            CheckUtils.checkCondition(usuariosConEseEmail == [], "Ya existe un usuario con este email")
+            this.email = nuevosDatos.email
+        }
+        if(nuevosDatos.url_imagen_perfil) this.urlImagenPerfil = nuevosDatos.url_imagen_perfil
+    }
+
+    static Usuario createFromMap(Map body){
+        Usuario usuario = new Usuario()
+        if(body.email) usuario.email = body.email
+        if(body.google_id) usuario.googleId = body.google_id
+        if(body.url_imagen_perfil) usuario.urlImagenPerfil = body.url_imagen_perfil
+        return usuario
     }
 }

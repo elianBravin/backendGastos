@@ -3,44 +3,45 @@ package gastos
 
 
 import grails.transaction.Transactional
+import utilsElian.CheckUtils
 
 @Transactional(readOnly = true)
 class UsuarioController {
 
     UsuarioService usuarioService
+    private static final String EMAIL_FIELD = "email"
+    private static final String GOOGLE_ID_FIELD = "google_id"
+    public static final String GOOGLE_PHOTO_URL_BODY = "url_imagen_perfil"
 
     def crearUsuario(){
         Map body = request.getJSON()
-        if(!(body?.name)){
-            throw new Exception("nombre no encontrado")
-        }
-        if(!(body?.password)){
-            throw new Exception("password no encontrado")
-        }
+        CheckUtils.checkAndGetBody(body, EMAIL_FIELD, "Email no encontrado")
+        CheckUtils.checkAndGetBody(body, GOOGLE_ID_FIELD, "Google id no encontrado")
+        CheckUtils.checkAndGetBody(body, GOOGLE_PHOTO_URL_BODY, "Url foto no encontrada")
         render(contentType: "application/json") {
-            usuarioService.crearUsuario(body.nombre, body.password)
+            usuarioService.crearUsuario(body)
         }
     }
 
     def obtenerUsuario(){
-        String usuarioUuid = params.getProperty("idUsuario")
+        String googleId = CheckUtils.checkAndGetParameter(params, "googleId", "Google id no encontrado")
         render(contentType: "application/json") {
-            usuarioService.obtenerUsuario(usuarioUuid)
+            usuarioService.obtenerUsuario(googleId)
         }
     }
 
     def modificarUsuario(){
         Map body = request.getJSON()
-        String usuarioUuid = params.getProperty("idUsuario")
+        String googleId = CheckUtils.checkAndGetParameter(params, "googleId", "Google id no encontrado")
         render(contentType: "application/json") {
-            usuarioService.modificarUsuario(body, usuarioUuid)
+            usuarioService.modificarUsuario(body, googleId)
         }
     }
 
     def borrarUsuario(){
-        String usuarioUuid = params.getProperty("idUsuario")
+        String googleId = CheckUtils.checkAndGetParameter(params, "googleId", "Google id no encontrado")
         render(contentType: "application/json") {
-            usuarioService.borrarUsuario(usuarioUuid)
+            usuarioService.borrarUsuario(googleId)
         }
     }
 }

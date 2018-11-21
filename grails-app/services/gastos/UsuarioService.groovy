@@ -1,44 +1,39 @@
 package gastos
 
 import grails.transaction.Transactional
+import utilsElian.CheckUtils
 
 @Transactional
 class UsuarioService {
 
-    Map crearUsuario(String nombre, String password) {
-        Usuario usuario = Usuario.findByNombre(nombre)
-        if(usuario){
-            return (["status":"Usuario ya existe"])
-        }
-        usuario = new Usuario()
-        usuario.nombre = nombre
-        usuario.password = password.encodeAsMD5()
+    Map crearUsuario(Map body) {
+        Usuario usuario = Usuario.findByGoogleId(body.google_id)
+        CheckUtils.checkIfNotExist(usuario, "Usuario ya existe")
+        usuario = Usuario.findByEmail(body.email)
+        CheckUtils.checkIfNotExist(usuario, "Ya existe un usuario con este email")
+        usuario = Usuario.createFromMap(body)
         usuario.save(failOnError: true, flush: true)
         return usuario.toMap()
     }
 
-    Map obtenerUsuario(String nombre){
-        Usuario usuario = Usuario.findByNombre(nombre)
-        return (usuario ? usuario.toMap() : ["status":"Usuario no existe"])
+    Map obtenerUsuario(String googleId){
+        Usuario usuario = Usuario.findByGoogleId(googleId)
+        CheckUtils.checkIfExist(usuario, "Usuario no existe")
+        return usuario.toMap()
     }
 
-    Map modificarUsuario(Map nuevosDatos, String nombre){
-        Usuario usuario = Usuario.findByNombre(nombre)
-        if(!usuario){
-            return ["status":"Usuario no existe"]
-        }
-        usuario.nombre = nuevosDatos.nombre ?: usuario.nombre
-        usuario.password = nuevosDatos.password ? nuevosDatos.password.encodeAsMD5() : usuario.password
+    Map modificarUsuario(Map nuevosDatos, String googleId){
+        Usuario usuario = Usuario.findByGoogleId(googleId)
+        CheckUtils.checkIfExist(usuario, "Usuario no existe")
+        usuario.updateFromMap(nuevosDatos)
         usuario.save(failOnError: true, flush: true)
         return usuario.toMap()
     }
 
-    Map borrarUsuario(String nombre){
-        Usuario usuario = Usuario.findByNombre(nombre)
-        if(!usuario){
-            return ["status":"Usuario no existe"]
-        }
+    Map borrarUsuario(String googleId){
+        Usuario usuario = Usuario.findByGoogleId(googleId)
+        CheckUtils.checkIfExist(usuario, "Usuario no existe")
         usuario.delete(failOnError: true, flush: true)
-        usuario.toMap()
+        return ["status": "OK"]
     }
 }
