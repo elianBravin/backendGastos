@@ -31,6 +31,17 @@ class Movimiento {
         return result
     }
 
+    def toMapWithOutBilletera(){
+        def result = [:]
+        result.id = this.id
+        result.date_created = this.dateCreated
+        result.last_update = this.lastUpdated
+        result.descripcion = this.descripcion
+        result.cantidad = this.cantidad
+        //posicion geográfica del gasto
+        return result
+    }
+
     String toString(){
         return this.descripcion
     }

@@ -66,8 +66,8 @@ class BilleteraService {
         Billetera billetera = Billetera.findById(idBilletera)
         CheckUtils.checkIfExist(billetera, "Billetera $idBilletera no existe")
         CheckUtils.checkAutorization(token, billetera.usuarios as List)
-        List movimientosOrdenados = billetera.movimientos.sort { Movimiento a, Movimiento b -> b.id <=> a.id}
-        return  movimientosOrdenados
+        List<Movimiento> movimientosOrdenados = billetera.movimientos.sort { Movimiento a, Movimiento b -> b.id <=> a.id}
+        return  movimientosOrdenados*.toMapWithOutBilletera()
     }
 
     List searchMovimientos(Long idBilletera, Map requestParams, String token){
@@ -81,6 +81,6 @@ class BilleteraService {
         //ZonedDateTime.parse("2015-05-03T10:15:30+01:00");
         hasta.setTime(hasta.getTime() + 1000)
         List<Movimiento> movimientos = Movimiento.findAllByDateCreatedBetweenAndBilletera(desde, hasta, billetera)
-        return movimientos.sort { Movimiento a, Movimiento b -> b.id <=> a.id}
+        return movimientos.sort { Movimiento a, Movimiento b -> b.id <=> a.id}*.toMapWithOutBilletera()
     }
 }
