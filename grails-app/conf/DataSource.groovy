@@ -8,9 +8,9 @@ environments {
     production {
         dataSource {
             dbCreate = "do-nothing"
-            url = "jdbc:mysql://gastosdbelian.ccbzkfdkg45w.sa-east-1.rds.amazonaws.com:3306/gastosdbelian?autoReconnect=true"
+            url = "jdbc:mysql://dbelianaws.ccbzkfdkg45w.sa-east-1.rds.amazonaws.com:3306/dbElianAWS?autoReconnect=true"
             username = "elianBravin"
-            password = "admin123"
+            password = "admin_123"
             properties {
                 validationQuery = "select 1"
                 testOnBorrow = false

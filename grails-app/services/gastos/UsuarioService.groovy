@@ -1,9 +1,7 @@
 package gastos
 
-import grails.transaction.Transactional
 import utilsElian.CheckUtils
 
-@Transactional
 class UsuarioService {
 
     Map crearUsuario(Map body) {

@@ -2,11 +2,8 @@ package gastos
 
 
 
-import grails.transaction.Transactional
-import org.hibernate.annotations.Check
 import utilsElian.CheckUtils
 
-@Transactional(readOnly = true)
 class BilleteraController {
 
     public static final String NAME = "name"

@@ -1,11 +1,7 @@
 package gastos
 
-
-
-import grails.transaction.Transactional
 import utilsElian.CheckUtils
 
-@Transactional(readOnly = true)
 class UsuarioController {
 
     UsuarioService usuarioService
