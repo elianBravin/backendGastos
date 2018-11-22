@@ -46,9 +46,9 @@ class UrlMappings {
         //"/libro/$idLibro/balance"(controller: "libro", parseRequest: true){
         //    action = [GET: 'getBalance']
         //}
-        //"/ping"(controller: "libro", parseRequest: true){
-        //    action = [GET: 'ping']
-        //}
+        "/prueba"(controller: "usuario", parseRequest: true){
+            action = [GET: 'prueba']
+        }
         //
         //"/libro/$idLibro/movimientos/search"(controller: "movimiento", parseRequest: true) {
         //    action = [GET: 'searchMovimientos']

@@ -44,4 +44,10 @@ class UsuarioController {
             usuarioService.borrarUsuario(googleId)
         }
     }
+
+    def prueba(){
+        render(contentType: "application/json") {
+            ["server_status":"OK"]
+        }
+    }
 }
